@@ -1,0 +1,562 @@
+/* ========== 颜色：日落调色板 ========== */
+:root {
+  --ink: #2a0f4d;        /* 深紫色描边，所有轮廓都用它 */
+  --violet: #5b2bb5;
+  --lavender: #e3d4ff;   /* 标题字的填充色 */
+  --cream: #fff6d9;      /* 卡片背景 */
+  --gold: #ffb84d;
+  --white: #ffffff;
+
+    --pixel: "Pixelify Sans", system-ui, sans-serif;
+  --pixel-num: "Press Start 2P", "DotGothic16", monospace;
+
+  /* 像素描边：上下左右和四个斜角各错 3px，拼出一圈硬边 */
+  --outline:
+    3px 0 0 var(--ink), -3px 0 0 var(--ink),
+    0 3px 0 var(--ink), 0 -3px 0 var(--ink),
+    3px 3px 0 var(--ink), -3px 3px 0 var(--ink),
+    3px -3px 0 var(--ink), -3px -3px 0 var(--ink);
+}
+
+* { box-sizing: border-box; }
+
+/* ========== 背景：一条一条的日落色带 ========== */
+/* 每种颜色写两次（开始 % 和结束 %），中间就没有过渡，出现硬边色带 */
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--pixel);
+  color: var(--white);
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    #3a1584 0%,   #3a1584 8%,
+    #4d1fa3 8%,   #4d1fa3 16%,
+    #6a2cc4 16%,  #6a2cc4 24%,
+    #9433c9 24%,  #9433c9 32%,
+    #c93fb4 32%,  #c93fb4 40%,
+    #ee5a8f 40%,  #ee5a8f 48%,
+    #ff7a66 48%,  #ff7a66 56%,
+    #ff9b5e 56%,  #ff9b5e 64%,
+    #ffbf73 64%,  #ffbf73 72%,
+    #ffdc94 72%,  #ffdc94 80%,
+    #ffefbb 80%,  #ffefbb 90%,
+    #fff8dd 90%,  #fff8dd 100%
+  ) fixed;
+}
+
+/* 抖动网格：一层很淡的小棋盘格，叠在背景上做出"像素颗粒感" */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-conic-gradient(rgba(0,0,0,.06) 0 25%, transparent 0 50%) 0 0 / 4px 4px;
+}
+
+/* 星星：一个 4px 的小方块，用 box-shadow 复制到很多位置 */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 4px; height: 4px;
+  background: transparent;
+  pointer-events: none;
+  box-shadow:
+    8vw 6vh #fff, 22vw 14vh #fff, 41vw 4vh #fff, 63vw 11vh #fff,
+    82vw 7vh #fff, 93vw 19vh #fff, 15vw 27vh #fff, 74vw 24vh #fff,
+    5vw 38vh #fff, 88vw 35vh #fff, 33vw 21vh #fff, 55vw 30vh #fff;
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 16px 60px;
+}
+
+/* ========== 大标题：浅紫色字 + 深紫描边 + 往下凸出的立体感 ========== */
+h1 {
+  font-size: clamp(28px, 6vw, 46px);
+  line-height: 1.35;
+  color: var(--lavender);
+  letter-spacing: 2px;
+  text-shadow:
+    var(--outline),
+    0 6px 0 var(--violet), 3px 6px 0 var(--ink), -3px 6px 0 var(--ink),
+    0 9px 0 var(--ink);
+  margin: 0 0 36px;
+}
+h1 span { font-family: var(--pixel-num); font-size: .8em; color: var(--gold); }
+
+/* 小标题：白字黑边，像参考图里的 "STARTS IN" */
+h2 {
+  font-size: 18px;
+  font-weight: normal;
+  color: var(--white);
+  text-shadow: var(--outline);
+  margin: 0 0 16px;
+}
+
+/* ========== 像素方框：用四个方向的阴影代替 border，四个角自然缺一块 ========== */
+.presets button,
+.result {
+  background: var(--cream);
+  color: var(--ink);
+  border: none;
+  box-shadow:
+    0 -4px 0 0 var(--ink),
+    0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink),
+    4px 0 0 0 var(--ink),
+    0 8px 0 0 rgba(42, 15, 77, .35);  /* 下方一层半透明投影 */
+}
+
+/* ========== 预设按钮 ========== */
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+.presets button {
+  font-family: var(--pixel);
+  font-size: 15px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: transform .08s steps(2);  /* steps() 让动画也是一格一格跳的 */
+}
+.presets button:hover { transform: translateY(-3px); }
+.presets button:active { transform: translateY(2px); }
+.presets button.active { background: var(--gold); }
+
+/* ========== 滑块区 ========== */
+.controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 44px 0;
+}
+.controls label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  text-shadow: var(--outline);
+}
+/* 滑块上方的数字：像参考图里的倒计时数字 */
+.controls b {
+  font-family: var(--pixel-num);
+  font-size: 22px;
+  color: var(--white);
+  text-shadow: var(--outline), 0 6px 0 var(--ink);
+}
+
+/* 自定义滑块：深紫色轨道 + 方块拇指 */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: var(--ink);
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px;
+  background: var(--cream);
+  box-shadow: 0 0 0 4px var(--ink);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px; height: 20px;
+  border: none;
+  border-radius: 0;
+  background: var(--cream);
+  box-shadow: 0 0 0 4px var(--ink);
+}
+input[type="range"]:focus-visible { outline: 3px dashed var(--white); outline-offset: 6px; }
+
+@media (max-width: 600px) {
+  .controls { grid-template-columns: 1fr; }
+}
+
+/* ========== 结果卡：奶油色像素框，像参考图下方的 giveaway 框 ========== */
+.result {
+  padding: 28px 20px;
+  margin: 0 4px;  /* 给四周的像素边框留位置 */
+}
+.result p { margin: 6px 0; }
+
+.total {
+  font-family: var(--pixel-num);
+  font-size: clamp(24px, 8vw, 48px);
+  color: var(--white);
+  text-shadow:
+    var(--outline),
+    0 6px 0 var(--ink), 3px 6px 0 var(--ink), -3px 6px 0 var(--ink);
+  margin: 18px 0 !important;
+}
+
+.split {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 32px;
+}
+.split b {
+  font-family: var(--pixel-num);
+  font-size: 14px;
+  color: var(--violet);
+}
+
+.sound-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  background: var(--cream);
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink);
+}
+.sound-toggle:active { transform: translateY(2px); }
+
+/* 不喜欢动画的用户，关掉跳动效果 */
+@media (prefers-reduced-motion: reduce) {
+  .presets button { transition: none; }
+}
+
+/* ==================== 第 2 步：HP 面板 ==================== */
+:root {
+  --hp-red: #ff4d6d;
+  --hp-green: #3ccf6e;
+}
+
+/* 每周次数滑块：居中，宽度收窄 */
+.freq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 320px;
+  margin: 32px auto 0;
+  font-size: 16px;
+  text-shadow: var(--outline);
+}
+.freq b {
+  font-family: var(--pixel-num);
+  font-size: 22px;
+  text-shadow: var(--outline), 0 6px 0 var(--ink);
+}
+
+/* 两个大面板之间留出距离 */
+.panel { margin-top: 56px; }
+.panel-title { font-size: 24px; }
+.panel .controls { margin: 24px 0 40px; }
+
+/* HP 总数用红色 */
+.hp-total { color: var(--hp-red) !important; }
+
+/* 三个小统计格：电脑三列，手机一列 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 24px 0;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 8px;
+  border: 3px dashed rgba(42, 15, 77, .25);
+}
+.stat span { font-size: 15px; }
+.stat b {
+  font-family: var(--pixel-num);
+  font-size: 15px;
+  color: var(--violet);
+}
+.stat small { font-size: 13px; opacity: .75; min-height: 1.2em; }
+
+@media (max-width: 600px) {
+  .stats { grid-template-columns: 1fr; }
+}
+
+/* WHO 进度条：分格的像素血条 */
+.who { text-align: left; margin-top: 8px; }
+.who-label {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.who small { display: block; margin-top: 8px; font-size: 13px; }
+
+.bar {
+  height: 24px;
+  background: var(--ink);
+  padding: 4px;
+}
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  /* 每 10px 一格，中间留 2px 缝，看起来像游戏血条 */
+  background: repeating-linear-gradient(90deg, var(--hp-green) 0 10px, transparent 10px 12px);
+  transition: width .3s steps(8);
+}
+.bar-fill.over {
+  background: repeating-linear-gradient(90deg, var(--hp-red) 0 10px, transparent 10px 12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill { transition: none; }
+}
+/* ==================== 第 3 步：背包 + 对话框 ==================== */
+
+/* 给底部固定的对话框留出空间，免得挡住内容 */
+.wrap { padding-bottom: 200px; }
+
+/* ---------- 背包 ---------- */
+.inventory-wrap { margin-top: 40px; }
+
+.inventory {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 14px;
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 格子本体：正方形 + 内凹边框，像游戏里的道具栏 */
+.slot-box {
+  position: relative;
+  width: 100%;
+  max-width: 88px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  background: var(--cream);
+  box-shadow:
+    0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink),
+    inset 4px 4px 0 0 rgba(42, 15, 77, .15);   /* 左上内阴影 = 凹进去的感觉 */
+}
+
+/* 右下角的数量角标 */
+.slot-count {
+  position: absolute;
+  right: -6px;
+  bottom: -8px;
+  font-family: var(--pixel-num);
+  font-size: 10px;
+  color: var(--white);
+  background: var(--ink);
+  padding: 4px 5px;
+}
+
+.slot-name {
+  font-size: 13px;
+  line-height: 1.2;
+  text-shadow: var(--outline);
+}
+
+/* 买不起的道具：变灰、半透明 */
+.slot.locked .slot-box { filter: grayscale(1); opacity: .45; }
+.slot.locked .slot-count { background: #7a6a8f; }
+
+/* 刚解锁的道具：闪一下 */
+.slot.unlocked .slot-box { animation: pop .4s steps(4); }
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- RPG 对话框 ---------- */
+.dialog {
+  position: fixed;
+  z-index: 3;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  width: min(728px, calc(100% - 32px));
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px 18px;
+  background: #1b0a33;
+  color: var(--white);
+  text-align: left;
+  cursor: pointer;
+  /* 里面一圈白边，外面一圈深紫边，经典 RPG 对话框 */
+  box-shadow:
+    0 0 0 4px var(--white),
+    0 0 0 8px var(--ink),
+    0 12px 0 4px rgba(42, 15, 77, .4);
+}
+
+.portrait {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  background: var(--violet);
+  box-shadow: 0 0 0 3px var(--white);
+}
+
+.dialog-body { flex: 1; min-width: 0; }
+
+.speaker {
+  font-family: var(--pixel-num);
+  font-size: 10px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+#dialogText {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+  min-height: 2.9em;   /* 至少两行高，打字时框不会跳动 */
+}
+
+/* 打完字后右下角闪烁的小箭头 */
+.next-arrow {
+  position: absolute;
+  right: 14px;
+  bottom: 6px;
+  font-size: 12px;
+  color: var(--gold);
+  visibility: hidden;
+}
+.dialog.done .next-arrow {
+  visibility: visible;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (max-width: 600px) {
+  .inventory { gap: 18px 10px; }
+  .slot-box { font-size: 26px; }
+  .portrait { width: 44px; height: 44px; font-size: 24px; }
+  #dialogText { font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot.unlocked .slot-box,
+  .dialog.done .next-arrow { animation: none; }
+}
+
+/* ==================== 第 4 步：成就系统 ==================== */
+
+/* ---------- 奖杯架 ---------- */
+.panel-title span {
+  font-family: var(--pixel-num);
+  font-size: 12px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.trophies {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 16px;
+  margin-top: 8px;
+}
+
+.trophy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow:
+    0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink);
+}
+.trophy-icon { font-size: 32px; }
+.trophy-name { font-size: 15px; font-weight: 600; }
+.trophy-desc { font-size: 12px; line-height: 1.3; opacity: .7; }
+
+/* 没解锁：灰色 */
+.trophy.locked { background: #d8cde6; }
+.trophy.locked .trophy-icon { filter: grayscale(1); opacity: .5; }
+
+/* 刚解锁：弹跳一下（复用第 3 步的 pop 动画） */
+.trophy.just-unlocked { animation: pop .4s steps(4); }
+
+.reset-btn {
+  margin-top: 28px;
+  font-family: var(--pixel);
+  font-size: 14px;
+  color: var(--ink);
+  background: transparent;
+  border: 3px dashed var(--ink);
+  padding: 6px 14px;
+  cursor: pointer;
+}
+.reset-btn.armed { background: var(--hp-red); color: var(--white); border-style: solid; }
+
+@media (max-width: 600px) {
+  .trophies { gap: 16px 10px; }
+  .trophy-icon { font-size: 26px; }
+  .trophy-name { font-size: 13px; }
+  .trophy-desc { font-size: 11px; }
+}
+
+/* ---------- 成就弹窗 ---------- */
+.toast {
+  position: fixed;
+  z-index: 4;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translate(-50%, -220%);     /* 平时藏在屏幕上方 */
+  transition: transform .3s steps(5);    /* 一格一格滑下来 */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100% - 32px);
+  padding: 12px 20px;
+  background: #1b0a33;
+  color: var(--white);
+  text-align: left;
+  box-shadow:
+    0 0 0 4px var(--gold),
+    0 0 0 8px var(--ink),
+    0 10px 0 4px rgba(42, 15, 77, .4);
+}
+.toast.show { transform: translate(-50%, 0); }
+
+.toast-icon { font-size: 34px; }
+.toast-title {
+  font-family: var(--pixel-num);
+  font-size: 10px;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.toast-name { font-size: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: none; }
+  .trophy.just-unlocked { animation: none; }
+}

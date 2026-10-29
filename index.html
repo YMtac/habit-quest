@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habit Quest</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button id="soundToggle" class="sound-toggle" aria-label="Toggle sound">🔊</button>
+    <!-- 🏆 成就弹窗：平时藏在屏幕上方，解锁时滑下来 -->
+  <div id="toast" class="toast" role="status" aria-live="assertive">
+    <div class="toast-icon" id="toastIcon">🏆</div>
+    <div>
+      <div class="toast-title">ACHIEVEMENT UNLOCKED</div>
+      <div class="toast-name" id="toastName"></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <h1>Skip a small habit.<br>See what it's worth in <span id="yearsTitle">30</span> years.</h1>
+
+    <section>
+      <h2>Choose your item</h2>
+      <div id="items" class="presets"></div>
+      <label class="freq">
+        Times per week <b id="freqValue"></b>
+        <input type="range" id="freq" min="1" max="14" step="1" value="7">
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel-title">💰 Coins</h2>
+      <div class="controls">
+        <label>
+          Saved per day <b id="dailyValue"></b>
+          <input type="range" id="daily" min="0.1" max="30" step="0.1" value="3.5">
+        </label>
+        <label>
+          Yearly return <b id="rateValue"></b>
+          <input type="range" id="rate" min="0" max="10" step="0.5" value="6">
+        </label>
+        <label>
+          Years <b id="yearsValue"></b>
+          <input type="range" id="years" min="1" max="45" step="1" value="30">
+        </label>
+      </div>
+
+      <div class="result">
+        <p>Your treasure chest</p>
+        <p class="total" id="total">€0</p>
+        <div class="split">
+          <p>You saved: <b id="principal">€0</b></p>
+          <p>Interest bonus: <b id="interest">€0</b></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel-title">❤️ HP</h2>
+
+      <div class="result">
+        <p>Every year you skip</p>
+        <p class="total hp-total" id="kcalTotal">0 kcal</p>
+
+        <div class="stats">
+          <div class="stat">
+            <span>🧊 Sugar</span>
+            <b id="sugarTotal">0 kg</b>
+            <small id="sugarCubes"></small>
+          </div>
+          <div class="stat">
+            <span>🍶 Alcohol</span>
+            <b id="alcoholTotal">0 g</b>
+            <small id="alcoholVodka"></small>
+          </div>
+          <div class="stat">
+            <span>🚶 Walk it off</span>
+            <b id="walkTotal">0 km</b>
+            <small id="walkPlace"></small>
+          </div>
+        </div>
+
+        <div class="who">
+          <div class="who-label">
+            <span>Daily sugar from this habit</span>
+            <span id="whoText">0 / 50 g</span>
+          </div>
+          <div class="bar"><div class="bar-fill" id="whoBar"></div></div>
+          <small id="whoNote"></small>
+        </div>
+      </div>
+        <!-- 🎒 背包：省下的钱能买什么 -->
+      <div class="inventory-wrap">
+        <h2>🎒 Inventory</h2>
+        <div id="inventory" class="inventory"></div>
+      </div>
+    </section>
+        <!-- ===== 🏆 奖杯架 ===== -->
+    <section class="panel">
+      <h2 class="panel-title">🏆 Trophies <span id="trophyCount">0 / 9</span></h2>
+      <div id="trophies" class="trophies"></div>
+      <button id="resetTrophies" class="reset-btn">Reset trophies</button>
+    </section>
+  </main>
+
+  <div id="dialog" class="dialog" role="status" aria-live="polite">
+    <div class="portrait">🧙</div>
+    <div class="dialog-body">
+      <div class="speaker">SAGE</div>
+      <p id="dialogText"></p>
+    </div>
+    <span class="next-arrow">▼</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
