@@ -8,7 +8,11 @@ Pick something you could live without, like a daily latte or a bottle of beer, a
 
 **Play it here:** https://YOUR-USERNAME.github.io/habit-quest/
 
-![Habit Quest screenshot](screenshot.png)
+[Habit Quest screenshot]
+<img width="1166" height="709" alt="image" src="https://github.com/user-attachments/assets/288403b6-6a9b-4e60-935d-33f96819836b" />
+<img width="1102" height="902" alt="image" src="https://github.com/user-attachments/assets/d7ce9ba4-0744-412c-970c-298c527b70b3" />
+<img width="1091" height="906" alt="image" src="https://github.com/user-attachments/assets/2a74ef0f-f01d-4024-a55c-88b49c2f222e" />
+
 
 ---
 
