@@ -64,7 +64,7 @@ All habits, loot and achievements live in plain arrays at the top of the file, s
 ##  Run locally
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/habit-quest.git
+git clone https://github.com/YMtac/habit-quest.git
 cd habit-quest
 ```
 
