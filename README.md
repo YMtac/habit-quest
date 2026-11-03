@@ -6,7 +6,7 @@
 Habit Quest is an 8-bit style web game that turns everyday habits into coins and HP.
 Pick something you could live without, like a daily latte or a bottle of beer, and see how much money compound interest turns it into, how much sugar and alcohol you skip, and how far you could walk on the calories you saved.
 
-**Play it here:** https://YOUR-USERNAME.github.io/habit-quest/
+**Play it here:** https://YMtac.github.io/habit-quest/
 
 [Habit Quest screenshot]
 <img width="1166" height="709" alt="image" src="https://github.com/user-attachments/assets/288403b6-6a9b-4e60-935d-33f96819836b" />
